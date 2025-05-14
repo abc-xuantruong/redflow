@@ -517,8 +517,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 665,
-        "y": 180,
+        "x": 545,
+        "y": 100,
         "wires": [
             [
                 "a9a92aabb3b0b68a"
@@ -538,8 +538,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 810,
-        "y": 180,
+        "x": 690,
+        "y": 100,
         "wires": [
             []
         ]
