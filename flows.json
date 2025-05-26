@@ -32,7 +32,7 @@
             "e90275fd1d80699e"
         ],
         "x": 774,
-        "y": 659,
+        "y": 639,
         "w": 562,
         "h": 122
     },
@@ -371,8 +371,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 85,
-        "y": 260,
+        "x": 965,
+        "y": 180,
         "wires": [
             [
                 "a9a92aabb3b0b68a"
@@ -392,8 +392,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 230,
-        "y": 260,
+        "x": 1130,
+        "y": 180,
         "wires": [
             []
         ]
@@ -594,9 +594,9 @@
         "type": "comment",
         "z": "f3deaa9ef8948c89",
         "name": "SQL SCHEMA",
-        "info": "CREATE TABLE \"S3PresignedObject\" (\n        \"id\" BIGSERIAL PRIMARY KEY, -- number running as primary key\n        \"createdAt\" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,\n        \"identityUID\" TEXT,\n        \"appUID\" TEXT,\n        \"fileUID\" TEXT,\n        \"bucketName\"    TEXT NOT NULL,\n        \"objectName\" TEXT NOT NULL,\n        \"url\" TEXT NOT NULL, -- presigned url\n        \"expiry\" BIGINT NOT NULL, -- expiry time for url\n        \"fileInfo\" JSONB NOT NULL DEFAULT '{}'::jsonb\n);\n\nCREATE TABLE \"S3Object\" (\n    \"fileUID\" TEXT PRIMARY KEY,\n    \"createdAt\" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    \"deletedAt\" TIMESTAMPTZ,\n    \"identityUID\" TEXT,\n\n    \"appUID\" TEXT,\n    \"fileInfo\" JSONB NOT NULL DEFAULT '{}'::jsonb,     -- {fileName, fileMime, ... }\n    \n    \"bucketName\" TEXT NOT NULL,\n    \"objectName\" TEXT NOT NULL,\n    \"versionID\" TEXT,\n    \"eTag\" TEXT,\n    \n    \"title\" TEXT,         -- title / short description\n    \"fullText\" TEXT,      -- extracted full text content\n);\n\nCREATE TABLE \"Document\" (\n        \"documentUID\",     -- prefix uuid v4\n        \"createdAt\",\n        \"deletedAt\",\n        \"modifiedAt\",\n\n        \"className\",       -- SampleDocument, SOP, Equipment, Personel,...\n        \"data\",            -- Serialized class data\n)\n\nCREATE TABLE \"AuditTrail\" (\n        \n)",
-        "x": 940,
-        "y": 40,
+        "info": "\nDROP TABLE IF EXISTS \"S3Object\";\nDROP TABLE IF EXISTS \"S3PresignedObject\";\nCREATE TABLE \"S3PresignedObject\" (\n        \"presignedObjectUID\"    TEXT PRIMARY KEY,\n        \"method\"                TEXT, -- [GET, PUT, POST, DELETE]\n        \"url\"                   TEXT NOT NULL,  -- s3.irdop.org\n        \"expiry\"                INTEGER,\n        \"appUID\"                TEXT,\n        \"identityUID\"           TEXT,\n        \"createdAt\"             TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,\n\n        -- target object info\n        \"fileUID\"               TEXT,\n        \"bucketName\"            TEXT,\n        \"objectName\"            TEXT,\n        \"reqParams\"             JSONB,\n        \"requestDate\"           TIMESTAMPTZ,\n        \n        -- file metadata\n        \"metadata\"              JSONB NOT NULL DEFAULT '{}'::jsonb\n);\n\nCREATE TABLE \"S3Object\" (\n        \"fileUID\"           TEXT PRIMARY KEY,\n        \"createdAt\"         TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,\n        \"deletedAt\"         TIMESTAMPTZ,\n        \"identityUID\"       TEXT,\n        \"appUID\"            TEXT,\n\n        -- s3 info\n        \"bucketName\" TEXT NOT NULL,\n        \"objectName\" TEXT NOT NULL,\n        \"versionID\"  TEXT,\n        \"eTag\"       TEXT,\n\n        -- file origin info\n        \"fileInfo\"          JSONB NOT NULL DEFAULT '{}'::jsonb,     -- {fileName, fileMime, fileSize, }\n\n        -- Table foreign key [UID]\n        \"foreignKeys\"       TEXT[],\n        \"fileGroupUID\"      TEXT,\n\n        -- who did what\n        \"createdByUID\"      TEXT,   -- Who composed the file\n        \"uploadedByUID\"     TEXT,   -- Who uploaded the file\n        \"reviewedByUID\"     TEXT,   -- Who reviewed the file\n        \"signedByUID\"       TEXT,   -- Who signed the file\n        \"uploadDescription\" TEXT,   -- ghi chú lúc upload\n\n        \"fileCategory\"      TEXT[], -- [RawData, PreparedReport, Calculation, Quote, PGM, BBBG, SampleImage ...]\n        \"isAutoGen\"         BOOLEAN -- true || false\n);\n\nCREATE TABLE \"File\" (\n    \"title\" TEXT,         -- title / short description\n    \"fullText\" TEXT,      -- extracted full text or content description\n)",
+        "x": 720,
+        "y": 60,
         "wires": []
     },
     {
@@ -610,7 +610,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 920,
-        "y": 700,
+        "y": 680,
         "wires": [
             [
                 "936ab34d061b13bd"
@@ -632,7 +632,7 @@
         "finalize": "",
         "libs": [],
         "x": 1130,
-        "y": 700,
+        "y": 680,
         "wires": [
             [
                 "ae2ad0ce0408670d"
@@ -648,7 +648,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1260,
-        "y": 700,
+        "y": 680,
         "wires": []
     },
     {
@@ -661,8 +661,8 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 900,
-        "y": 740,
+        "x": 890,
+        "y": 720,
         "wires": [
             [
                 "70c321c215674dc8"
@@ -684,7 +684,7 @@
         "finalize": "",
         "libs": [],
         "x": 1130,
-        "y": 740,
+        "y": 720,
         "wires": [
             [
                 "e90275fd1d80699e"
@@ -700,7 +700,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1260,
-        "y": 740,
+        "y": 720,
         "wires": []
     },
     {
@@ -716,7 +716,7 @@
         "finalize": "",
         "libs": [],
         "x": 1110,
-        "y": 140,
+        "y": 60,
         "wires": [
             []
         ]
@@ -742,8 +742,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 975,
-        "y": 140,
+        "x": 965,
+        "y": 60,
         "wires": [
             [
                 "d8be0870257285dd"
@@ -757,8 +757,8 @@
         "z": "f3deaa9ef8948c89",
         "name": "Updates",
         "info": "Hàm getSession() sẽ trả vể Session Class và gọi sẵn:\n- getUser() // Lấy user info\n- getDb()   // lấy Database connection\n(data-service.js dòng 52-53);\n\n\nĐỔI TÊN các Class: (Cho dễ gọi)\n- s3Client -> ObjectConnection\n- dbClient -> DataConnection\n(xem repo.js)\n\nTHÊM CHỨC NĂNG: database connection cho mỗi Session \n(xem entity.js)\n\nappUID và Database name\nLIMS-IRDOP-DEV -> LIMS-DEV\nLIMS-IRDOP-PRD -> LIMS",
-        "x": 920,
-        "y": 80,
+        "x": 700,
+        "y": 100,
         "wires": []
     },
     {
@@ -774,7 +774,7 @@
         "finalize": "",
         "libs": [],
         "x": 1100,
-        "y": 180,
+        "y": 100,
         "wires": [
             []
         ]
@@ -800,8 +800,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 975,
-        "y": 180,
+        "x": 965,
+        "y": 100,
         "wires": [
             [
                 "074bd4c2694edae1"
@@ -822,7 +822,7 @@
         "finalize": "",
         "libs": [],
         "x": 1100,
-        "y": 220,
+        "y": 140,
         "wires": [
             []
         ]
@@ -848,8 +848,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 975,
-        "y": 220,
+        "x": 965,
+        "y": 140,
         "wires": [
             [
                 "2b520f5b9538e2c3"
@@ -939,35 +939,6 @@
         "wires": []
     },
     {
-        "id": "153f0638eacc4b2d",
-        "type": "inject",
-        "z": "f3deaa9ef8948c89",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 560,
-        "y": 260,
-        "wires": [
-            [
-                "1921ea2569c8fb02"
-            ]
-        ]
-    },
-    {
         "id": "75a70de085e5c33e",
         "type": "http in",
         "z": "f3deaa9ef8948c89",
@@ -977,7 +948,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 910,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "943431eeed7d69b9"
@@ -997,7 +968,7 @@
         "finalize": "",
         "libs": [],
         "x": 1220,
-        "y": 360,
+        "y": 340,
         "wires": [
             [
                 "253bf74eeb9b3460"
@@ -1012,7 +983,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1430,
-        "y": 360,
+        "y": 340,
         "wires": []
     },
     {
@@ -1025,7 +996,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 880,
-        "y": 520,
+        "y": 500,
         "wires": [
             [
                 "c29b9ebad61c8a54"
@@ -1045,7 +1016,7 @@
         "finalize": "",
         "libs": [],
         "x": 1210,
-        "y": 520,
+        "y": 500,
         "wires": [
             [
                 "13c6f87da8249ca2"
@@ -1060,7 +1031,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1430,
-        "y": 520,
+        "y": 500,
         "wires": []
     },
     {
@@ -1073,7 +1044,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 860,
-        "y": 560,
+        "y": 540,
         "wires": [
             [
                 "b89ec3d8b06d84ed"
@@ -1093,7 +1064,7 @@
         "finalize": "",
         "libs": [],
         "x": 1210,
-        "y": 560,
+        "y": 540,
         "wires": [
             [
                 "3be12f28bfe1ed35"
@@ -1108,7 +1079,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1430,
-        "y": 560,
+        "y": 540,
         "wires": []
     },
     {
@@ -1121,7 +1092,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 880,
-        "y": 480,
+        "y": 460,
         "wires": [
             [
                 "e269a0b67cc450f9"
@@ -1141,7 +1112,7 @@
         "finalize": "",
         "libs": [],
         "x": 1220,
-        "y": 480,
+        "y": 460,
         "wires": [
             [
                 "d0b014feb9930547"
@@ -1156,7 +1127,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1430,
-        "y": 480,
+        "y": 460,
         "wires": []
     },
     {
@@ -1169,7 +1140,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 940,
-        "y": 400,
+        "y": 380,
         "wires": [
             [
                 "c87432613ffb7891"
@@ -1189,7 +1160,7 @@
         "finalize": "",
         "libs": [],
         "x": 1230,
-        "y": 400,
+        "y": 380,
         "wires": [
             [
                 "f54ac9e8eb84cafd"
@@ -1204,7 +1175,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1430,
-        "y": 400,
+        "y": 380,
         "wires": []
     },
     {
@@ -1217,7 +1188,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 920,
-        "y": 600,
+        "y": 580,
         "wires": [
             [
                 "94d31d27dc1eb26d"
@@ -1237,7 +1208,7 @@
         "finalize": "",
         "libs": [],
         "x": 1210,
-        "y": 600,
+        "y": 580,
         "wires": [
             [
                 "58b8db6ccd911763"
@@ -1252,7 +1223,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1430,
-        "y": 600,
+        "y": 580,
         "wires": []
     }
 ]
