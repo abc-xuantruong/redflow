@@ -10,7 +10,7 @@
     {
         "id": "7c3157bf68c1b848",
         "type": "tab",
-        "label": "DASHBOARD",
+        "label": "S3 Up Links",
         "disabled": false,
         "info": "",
         "env": []
@@ -972,11 +972,11 @@
         "type": "http in",
         "z": "f3deaa9ef8948c89",
         "name": "",
-        "url": "/v1/file/uplink/analysis",
+        "url": "/v1/file/uplink/lab/activities",
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 900,
+        "x": 910,
         "y": 360,
         "wires": [
             [
@@ -1025,7 +1025,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 880,
-        "y": 480,
+        "y": 520,
         "wires": [
             [
                 "c29b9ebad61c8a54"
@@ -1045,7 +1045,7 @@
         "finalize": "",
         "libs": [],
         "x": 1210,
-        "y": 480,
+        "y": 520,
         "wires": [
             [
                 "13c6f87da8249ca2"
@@ -1060,7 +1060,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1430,
-        "y": 480,
+        "y": 520,
         "wires": []
     },
     {
@@ -1073,7 +1073,7 @@
         "upload": false,
         "swaggerDoc": "",
         "x": 860,
-        "y": 520,
+        "y": 560,
         "wires": [
             [
                 "b89ec3d8b06d84ed"
@@ -1093,7 +1093,7 @@
         "finalize": "",
         "libs": [],
         "x": 1210,
-        "y": 520,
+        "y": 560,
         "wires": [
             [
                 "3be12f28bfe1ed35"
@@ -1108,7 +1108,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1430,
-        "y": 520,
+        "y": 560,
         "wires": []
     },
     {
@@ -1120,8 +1120,8 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 890,
-        "y": 440,
+        "x": 880,
+        "y": 480,
         "wires": [
             [
                 "e269a0b67cc450f9"
@@ -1141,7 +1141,7 @@
         "finalize": "",
         "libs": [],
         "x": 1220,
-        "y": 440,
+        "y": 480,
         "wires": [
             [
                 "d0b014feb9930547"
@@ -1156,7 +1156,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1430,
-        "y": 440,
+        "y": 480,
         "wires": []
     },
     {
@@ -1164,11 +1164,11 @@
         "type": "http in",
         "z": "f3deaa9ef8948c89",
         "name": "",
-        "url": "/v1/file/uplink/sample_image",
+        "url": "/v1/file/uplink/image/sample/activities",
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 920,
+        "x": 940,
         "y": 400,
         "wires": [
             [
@@ -1216,7 +1216,7 @@
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 930,
+        "x": 920,
         "y": 600,
         "wires": [
             [
@@ -1254,558 +1254,5 @@
         "x": 1430,
         "y": 600,
         "wires": []
-    },
-    {
-        "id": "9a2fab9a4fe0699f",
-        "type": "comment",
-        "z": "7c3157bf68c1b848",
-        "name": "",
-        "info": "",
-        "x": 1300,
-        "y": 660,
-        "wires": []
-    },
-    {
-        "id": "62d20a13bc2bc538",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "function 19",
-        "func": "const repo = global.get('repo.js');\nconst { getSession,\n    getUser,\n    getUserByInfo,\n    loginUser,\n    newUser} = global.get('data-service.js');\n\nconst { trackPerformance, cError, handleError } = global.get('utilities.js');\n\nif (!repo) {\n    node.status({ fill: 'red', shape: 'dot', text: 'repo.js not found in global context' });\n    node.error(\"repo.js not found in global context. Make sure the node defining it runs first.\");\n    return null;\n}\n\nconst { s3Client } = repo;\n\nconst minioOptions = {\n    \"endPoint\": \"s3.irdop.org\",\n    \"accessKey\": \"rNItZci16fmAVcb9HA2e\",\n    \"secretKey\": \"GD1hNEGOteycopeFIDWqPItFoULeJvGkX52LMBdt\",\n};\n\nconst session = {\n    identityUID: 'user-123',\n    identityName: 'Test User',\n    s3Bucket: 'irdop-dev',\n};\n\n(async function() {\n    let presignedGetUrl = null;\n    let presignedPutUrl = null;\n        node.warn(\"this is f18\")\n\n    node.warn(getSession(msg))\n    try {\n        const minioS3Client = new s3Client(minioOptions, session);\n        node.warn(\"[Usage] s3Client instance created.\");\n\n        const objectToPut = 'tmp/a.txt';\n        const expiryForPut = 600;\n        const uploadMetaData = {\n        };\n        // presignedPutUrl = await minioS3Client.getPresignedPutUrl(objectToPut, expiryForPut, uploadMetaData);\n        //  if (presignedPutUrl) {\n        //      node.log(`[Usage] Đã nhận Presigned URL PUT cho \"${objectToPut}\": ${presignedPutUrl}`);\n        //      msg.payload = {\n        //          action: 'upload',\n        //          objectName: objectToPut,\n        //          presignedPutUrl: presignedPutUrl\n        //      };\n        // } else {\n        //      throw new cError(500, 'Info is required');\n        // }\n\n        // msg.payload = msg.payload || {};\n\n        // if (presignedGetUrl) {\n        //     msg.payload.presignedGetUrl = presignedGetUrl;\n        // }\n        //  if (presignedPutUrl) {\n        //      msg.payload.presignedPutUrl = presignedPutUrl;\n        //      msg.payload.objectToPut = objectToPut;\n        //  }\n        return msg;\n    } catch (error) {\n        throw new cError(500, \"Error with presignUrl :\"+error);\n    }\n})();",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1190,
-        "y": 860,
-        "wires": [
-            [
-                "ee0e3927d3866b73"
-            ]
-        ]
-    },
-    {
-        "id": "333f696bdb9f46df",
-        "type": "comment",
-        "z": "7c3157bf68c1b848",
-        "name": "SQL SCHEMA",
-        "info": "const { trackPerformance, cError, handleError } = global.get('utilities.js') || {\n    trackPerformance: (name, start, success) => { node.warn(`[PERF] ${name}: ${Date.now() - start}ms (Success: ${success})`); },\n    cError: class extends Error { constructor(code, message) { super(message); this.code = code; } },\n    handleError: (context, error, shouldThrow) => { node.error(`[ERROR] ${context}: ${error.message}`); if (shouldThrow) throw error; }\n};\n\nconst columnCache = global.get('cache.js')?.getCache(\"ColumnCache\") || new Map();\n\nconst repo = global.get('repo.js');\n\nif (!repo || !repo.ObjectConnection || !repo.DataConnection) {\n    node.error(\"Required classes (ObjectConnection, DataConnection) not found in global context. Ensure the setup node ('node_red_test_node') is deployed and runs successfully first.\");\n    node.status({ fill: 'red', shape: 'dot', text: 'Repo Classes Not Found' });\n    return null;\n}\n\nconst { ObjectConnection, DataConnection } = repo;\n\nconst minioConfig = {\n    endPoint: 'localhost',\n    port: 9000,\n    useSSL: false,\n    accessKey: 'YOUR_MINIO_ACCESS_KEY',\n    secretKey: 'YOUR_MINIO_SECRET_KEY',\n    bucket: 'your-default-bucket'\n};\n\nconst pgConfig = {\n    user: 'your_db_user',\n    host: 'localhost',\n    database: 'your_db_name',\n    pw: 'your_db_password',\n    port: 5432,\n    name: 'your_db_name'\n};\n\nconst mockSession = {\n    identityUID: \"mock-user-id\",\n    identityName: \"Test User\",\n    s3Bucket: minioConfig.bucket,\n    db: null\n};\n\nlet objectConnection = null;\nlet dataConnection = null;\n\ntry {\n    dataConnection = new DataConnection(pgConfig, mockSession);\n    mockSession.db = dataConnection;\n    objectConnection = new ObjectConnection(minioConfig, mockSession);\n\n    node.status({ fill: 'green', shape: 'dot', text: 'Ready' });\n\n} catch (initError) {\n    node.error(\"Failed to initialize connections using classes from global context:\", initError);\n    node.status({ fill: 'red', shape: 'dot', text: 'Init Failed' });\n}\n\nnode.on('input', async function(msg) {\n    if (!objectConnection || !dataConnection) {\n        node.error(\"Connections not initialized. Ensure the setup node ran successfully.\");\n        msg.payload = { error: \"Connections not initialized\" };\n        node.send(msg);\n        return;\n    }\n\n    const { topic, payload } = msg;\n\n    try {\n        let result = null;\n\n        switch (topic) {\n            case 'getPresignedPutUrl':\n                 if (payload && payload.objectName) {\n                      node.warn(`Testing getPresignedPutUrl for object: ${payload.objectName}`);\n                      result = await objectConnection.getPresignedPutUrl(payload.objectName, payload.expiry, payload.metaData);\n                 } else {\n                     throw new Error(\"Invalid payload for getPresignedPutUrl. Expected { objectName: '...', ... }\");\n                 }\n                 break;\n\n            default:\n                node.warn(`Only 'getPresignedPutUrl' topic is handled. Received unknown topic: ${topic}.`);\n                result = { status: `Only 'getPresignedPutUrl' topic is handled. Received unknown topic: ${topic}.` };\n        }\n\n        msg.payload = result;\n        node.send(msg);\n\n    } catch (error) {\n        node.error(`Error processing message with topic ${topic}:`, error);\n        msg.payload = { error: error.message };\n        node.send(msg);\n    }\n});\n",
-        "x": 1340,
-        "y": 720,
-        "wires": []
-    },
-    {
-        "id": "ee0e3927d3866b73",
-        "type": "http response",
-        "z": "7c3157bf68c1b848",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 1330,
-        "y": 860,
-        "wires": []
-    },
-    {
-        "id": "d0dd4c2c72b4524e",
-        "type": "comment",
-        "z": "7c3157bf68c1b848",
-        "name": "Updates",
-        "info": "Hàm getSession() sẽ trả vể Session Class và gọi sẵn:\n- getUser() // Lấy user info\n- getDb()   // lấy Database connection\n(data-service.js dòng 52-53);\n\n\nĐỔI TÊN các Class: (Cho dễ gọi)\n- s3Client -> ObjectConnection\n- dbClient -> DataConnection\n(xem repo.js)\n\nTHÊM CHỨC NĂNG: database connection cho mỗi Session \n(xem entity.js)\n",
-        "x": 1320,
-        "y": 760,
-        "wires": []
-    },
-    {
-        "id": "55c91307ac74c3f6",
-        "type": "inject",
-        "z": "7c3157bf68c1b848",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 105,
-        "y": 420,
-        "wires": [
-            [
-                "32af65a13a37e041"
-            ]
-        ],
-        "l": false
-    },
-    {
-        "id": "32af65a13a37e041",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "Print Performance Data",
-        "func": "const { printPerformanceData } = global.get('utilities.js');\nprintPerformanceData();\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 250,
-        "y": 420,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "81faf9b9c28f72be",
-        "type": "http response",
-        "z": "7c3157bf68c1b848",
-        "name": "",
-        "statusCode": "",
-        "headers": {},
-        "x": 870,
-        "y": 280,
-        "wires": []
-    },
-    {
-        "id": "899857d7c14e4269",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "test db connection",
-        "func": "const { getSession } = global.get(\"data-service.js\");\ntry {\nconst dbOptions = {\n         \"database\": \"LIMS\",\n        \"user\": \"postgres\",\n        \"host\": \"red.irdop.org\",\n        \"password\": \"exploring-dynasty-system\",\n        \"port\": 5432\n\n};\n        // GET SESSION & USER\n        // const { req } = msg;\n\n        const req = {};\n        req.headers = {};\n        req.headers.authorization = \"Bearer sx_58364de7a7b24a0283d6ad95443f4bf2400f17a8b1264c16835325095b0b5e75317a12f9846d426f85745652c85e\"\n        req.headers['x-fh-app-uid'] = \"LIMS-IRDOP-PRD\";\n\n      //  const session = await getSession(req);\n        const cn=new pg.Pool(dbOptions)\n        await cn.connect()\n        // PREPARE RESPONSE\n        if (session?.db) {\n                const result = await cn.query(\n                        `SELECT tablename\n                        FROM pg_catalog.pg_tables\n                        WHERE schemaname = 'public';\n                        `\n                )\n                node.warn( {result} );\n        } else {\n                msg.statusCode = 401;\n                msg.payload = { message: 'Session is expired. Please login to continue' };\n        }\n} catch (error) {\n        if (error.statusCode && error.statusCode >= 400 && error.statusCode < 500) {\n                msg.statusCode = error.statusCode;\n                msg.payload = { message: error.message || 'Client error occurred' };\n        } else {\n                msg.statusCode = 500;\n                msg.payload = { message: 'Internal server error' };\n                node.error(error);\n        }\n}\n\nreturn msg;\n\n// // Test input\n// const req = {};\n// req.headers = {};\n// req.headers.authorization = \"Bearer sx_1549e6de0f174145a387745644e50aa30f7e6cf75c5342ccb2d7c51b0fdb8f40e3c6839c40df425b8fd4091147e6\"\n// req.headers['x-fh-app-uid'] = \"LIMS-IRDOP-DEV\";",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "pg",
-                "module": "pg"
-            }
-        ],
-        "x": 790,
-        "y": 400,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "01d70e60f2c2e6b4",
-        "type": "inject",
-        "z": "7c3157bf68c1b848",
-        "name": "Test DB Connection",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 655,
-        "y": 400,
-        "wires": [
-            [
-                "899857d7c14e4269"
-            ]
-        ],
-        "l": false
-    },
-    {
-        "id": "c21f7d1f6aac7234",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "test genFileUID",
-        "func": "const { getSession } = global.get(\"data-service.js\");\ntry {\n        // GET SESSION & USER\n        // const { req } = msg;\n\n        const req = {};\n        req.headers = {};\n        req.headers.authorization = \"Bearer sx_58364de7a7b24a0283d6ad95443f4bf2400f17a8b1264c16835325095b0b5e75317a12f9846d426f85745652c85e\"\n        req.headers['x-fh-app-uid'] = \"LIMS-IRDOP-PRD\";\n\n        const session = await getSession(req);\n\n        // PREPARE RESPONSE\n        if (session?.db) {\n                const result = await session.s3.genFileUID()\n                node.warn({ result });\n        } else {\n                msg.statusCode = 401;\n                msg.payload = { message: 'Session is expired. Please login to continue' };\n        }\n} catch (error) {\n        if (error.statusCode && error.statusCode >= 400 && error.statusCode < 500) {\n                msg.statusCode = error.statusCode;\n                msg.payload = { message: error.message || 'Client error occurred' };\n        } else {\n                msg.statusCode = 500;\n                msg.payload = { message: 'Internal server error' };\n                node.error(error);\n        }\n}\nreturn msg;\n\n// // Test input\n// const req = {};\n// req.headers = {};\n// req.headers.authorization = \"Bearer sx_1549e6de0f174145a387745644e50aa30f7e6cf75c5342ccb2d7c51b0fdb8f40e3c6839c40df425b8fd4091147e6\"\n// req.headers['x-fh-app-uid'] = \"LIMS-IRDOP-DEV\";",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 780,
-        "y": 440,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "7c36aba87e6023c2",
-        "type": "inject",
-        "z": "7c3157bf68c1b848",
-        "name": "genFileUID",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 655,
-        "y": 440,
-        "wires": [
-            [
-                "c21f7d1f6aac7234"
-            ]
-        ],
-        "l": false
-    },
-    {
-        "id": "681384c558da21f3",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "test bucketList",
-        "func": "\n// Cấu hình kết nối MinIO của bạn\nconst minioConfig = {\n    endPoint: 's3.irdop.org',\n    port: 443,\n    useSSL: true,\n    accessKey: 'KH0I7XQM9XrN5bwaeX7d',\n    secretKey: 'ZrWVaLJKCieBcj5L90BynImIKDSeNrTr4M0yOtOd',\n    bucket: 'irdop' // Thêm bucket vào đây nếu bạn muốn thực hiện các thao tác trên bucket cụ thể\n};\n\n// Khởi tạo client MinIO\nconst minioClient = new Minio.Client(minioConfig);\n\nasync function checkMinioConnection() {\n    try {\n        node.warn('Đang cố gắng kết nối với MinIO...');\n        // Thử liệt kê các bucket để kiểm tra kết nối\n        const buckets = await minioClient.listBuckets();\n        node.warn('Kết nối MinIO thành công!');\n        node.warn('Các buckets hiện có:'+ buckets.map(bucket => bucket.name));\n\n        // Nếu bạn muốn kiểm tra xem bucket cụ thể có tồn tại không\n        const bucketExists = await minioClient.bucketExists(minioConfig.bucket);\n        if (bucketExists) {\n            node.warn(`Bucket \"${minioConfig.bucket}\" tồn tại.`);\n        } else {\n            node.warn(`Bucket \"${minioConfig.bucket}\" không tồn tại.`);\n        }\n\n    } catch (error) {\n        node.warn('Lỗi khi kết nối đến MinIO:'+ error);\n        node.warn('Chi tiết lỗi:'+ error.message);\n        if (error.code === 'NetworkingError') {\n            node.warn('Kiểm tra lại endPoint, port hoặc kết nối mạng của bạn.');\n        } else if (error.code === 'AccessDenied' || error.code === 'InvalidAccessKeyId' || error.code === 'SignatureDoesNotMatch') {\n            node.warn('Kiểm tra lại accessKey và secretKey của bạn.');\n        }\n    }\n}\n\n// Gọi hàm để kiểm tra kết nốa i\n checkMinioConnection();",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "Minio",
-                "module": "minio"
-            }
-        ],
-        "x": 800,
-        "y": 480,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "37efd865b3192621",
-        "type": "inject",
-        "z": "7c3157bf68c1b848",
-        "name": "Test DB Connection",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 655,
-        "y": 480,
-        "wires": [
-            [
-                "681384c558da21f3"
-            ]
-        ],
-        "l": false
-    },
-    {
-        "id": "60a7efdd2392105b",
-        "type": "inject",
-        "z": "7c3157bf68c1b848",
-        "name": "START",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": "0.001",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 370,
-        "y": 500,
-        "wires": [
-            [
-                "9f87f39705146579"
-            ]
-        ]
-    },
-    {
-        "id": "953c8243745c5841",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "entity.js",
-        "func": "node.status({ fill: 'yellow', shape: 'dot', text: '...' });\nconst { trackPerformance, cError, handleError } = global.get('utilities.js');\nconst dataService = global.get('data-service.js');\nconst { createCache, CacheWorld } = global.get('cache.js');\nconst { ObjectConnection, DataConnection } = global.get('repo.js');\n\nclass Session {\n    #headers = {};\n    #info = {};\n    #discovery = {};\n    s3 = {};   // ObjectStore client\n    db = {};   // Database client\n\n    constructor(info, headers) {\n        if (!info) throw new cError(500, 'Session Info is required');\n        this.className = this.constructor.name;\n        this.#info = { ...info, className: this.className };\n        this.#headers = headers;\n\n        // S3 Client cho Session entity\n        const s3Options = env.get('s3Config')[this.appUID];         // s3 config theo appUID \n        this.s3 = new ObjectConnection(s3Options, this);         // Lưu client vào session\n        node.warn({ s3: this.s3 });\n    }\n\n    // Identity\n    get info() { return this.#info }\n    get identityUID() { return this.#info.identityUID; }\n    get user() { return this.#discovery?.User; }\n    get email() { return this.#discovery?.User?.email; }\n    get identityName() { return this.#discovery?.User?.identityName; }\n    get role() { return this.#info.role; }\n\n    // Auth & access\n    get token() { return this.sessionUID; }\n    get sessionUID() { return this.#info.sessionUID; }\n    get headers() { return this.#headers; }\n    get appUID() { return this.#info.appUID; }\n    set headers(headers) { this.#headers = headers; }\n\n    // Repo\n    get accessKey() { return this.#info.accessKey; }\n\n    async getUser() {       // Lấy userInfo của session này\n        try {\n            const user = await dataService.getUser(this);\n            if (user) this.#discovery['User'] = user;\n            return user;\n        } catch (error) { return null; }\n    }\n\n    async getDb() {         // Establish database connection\n        const startTime = Date.now();     // Track Performance\n        let isSuccess = true;           // Track Performance\n        try {\n            const dbConfig = env.get('dbConfig')[this.appUID];\n            this.db = new DataConnection(dbConfig, this);\n            await this.db.connect();\n            return this.db;\n        } catch (error) {\n            isSuccess = false;\n            handleError(error, 'repo.js.Session.getDB()');\n        } finally {\n            trackPerformance(\"repo.js.Session.getDB()\", startTime, isSuccess);\n        }\n    }\n\n    serialize() {           // toJSON \n        return {\n            ...this.info,\n            ...Object.fromEntries(\n                Object.entries(this.#discovery).map(([key, value]) => [\n                    key,\n                    value && typeof value.serialize === 'function' ? value.serialize() : value,\n                ]),\n            ),\n            className: this.className,\n        };\n    }\n}\n\nclass Entity {\n    #discovery = {};\n    #info = {};\n    #session = {};\n\n    constructor(info, session) {\n        if (!info) throw new cError(500, 'Info is required');\n        this.#info = info;\n        this.#session = session;\n    }\n\n    get session() { return this.#session; }\n    get info() { return { ...this.#info, className: this.className }; }\n    get discovery() { return this.#discovery; } // Info mở rộng lưu vào #discovery\n\n    newDiscovery(discovery = {}) {\n        if (discovery) {\n            Object.entries(discovery).forEach(([key, value]) => {\n                if (value && typeof value === 'object' && !Array.isArray(value)) {\n                    this.#discovery[key] = value;\n                } else {\n                    this.#discovery[key] = value;\n                }\n            });\n        }\n    }\n\n    // Info mở rộng lưu vào #discovery\n    serialize() {       // convert object gồm cả info đã mở rộng từ newDiscovery\n        return {\n            ...this.info,\n            ...Object.fromEntries(\n                Object.entries(this.#discovery).map(([key, value]) => [\n                    key,\n                    value && typeof value.serialize === 'function' ? value.serialize() : value,\n                ])\n            ),\n        };\n    }\n\n    // PERMISSION\n    getPermissionFor(action) {\n\n    }\n\n    addLog(logType, logTime, logForEntity, fnName, data) {\n        const options = {\n            logType: logType || '',           // event/scheduled | auto/manual |\n            logObject: logForEntity || '',           // Sử dụng thiết bị, theo dõi môi trường, nhật ký hệ thống, nhật ký thử nghiệm, nhật ký người dùng, nhật ký mẫu,\n            logNotion: '',                           // error, warning, info\n            timestamp: logTime || Date.now(),\n            systemLog: {\n                entity: this.className,\n                fnName: fnName || '',\n                timestamp: Date.now(),\n                sessionUID: this.session.sessionUID,\n                appUID: this.session.appUID,\n                accessKey: this.session.accessKey,\n                identityUID: this.session.identityUID,\n            },\n            description: data.description || '',\n        };\n\n        const doneBy = `thực hiện bởi ${this.session.identityName || this.session.identityUID}`;\n    }     // TODO\n    addAudit(actionType, timestamp, fnName, description) { }   // TODO\n}\n\nclass User extends Entity {\n    constructor(info, session) {\n        super(info, session);\n\n        // Tạo getter từ info object\n        Object.keys(info).forEach(key => {\n            if (key !== 'className') {\n                Object.defineProperty(this, key, {\n                    get: () => this.info[key],\n                    enumerable: true,\n                    configurable: true,\n                });\n            }\n        });\n        this.className = 'User';\n    }\n\n    get relation() { return this.discovery?.relations; }\n\n    async editInfo(newInfo) {\n        if (newInfo) {\n            // query/ post / access\n        }\n        return new User(this.info, this.session);\n    }\n\n    async newRelation(relation) {\n        if (relation?.appUID) {\n            // query/ post / access return {}\n            this.newDiscovery({ relations: await this.getRelation() });\n        }\n        // relations = [\n        //     {\n        //         appUID: 'LIMS-IRDOP-DEV',\n        //         disabled: false,\n        //         staff: true,\n        //         staff_technician: true,\n        //     }, {\n        //         appUID: 'LIMS-IRDOP-DEV',\n        //         disabled: false,\n        //         staff: true,\n        //         staff_technician: true,\n        //     },\n        // ]\n    }\n\n    async getRelationList() { }\n\n    async getRelation(appUID) { }\n\n    // CHECK Permission\n    canEdit() {\n    }\n}\n\n// TODO CLASS: Analysis, Sample, Receipt\n// TODO CLASS: File (with fileInfo {...})6\n// TODO CLASS: Log      (actionType on any entity) \n// TODO CLASS: Audit    (actionType on any entity)\n\nglobal.set('entity.js', { Session, User });\nnode.status({ fill: 'green', shape: 'dot', text: 'OK' });\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1140,
-        "y": 620,
-        "wires": [
-            [
-                "11e509928b14c56d",
-                "4d5d788611c88d5b"
-            ]
-        ]
-    },
-    {
-        "id": "11e509928b14c56d",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "data-service",
-        "func": "node.status({ fill: 'yellow', shape: 'dot', text: '...' });\nconst { trackPerformance, cError, handleError } = global.get('utilities.js');\nconst { convertCamelCase, convertSnakeCase } = global.get('utilities.js');\nconst { Session, User } = global.get('entity.js');\nconst { createCache } = global.get('cache.js');\nconst axios = global.get('axios');\nconst { Pool } = pg;\n\n// DECLARE CACHES\nconst sessionCache = createCache('Session', 120 * 60 * 1000);        // 2 hour\nconst userCache = createCache('User', 60 * 60 * 1000);        // 1 hour\nconst analysisCache = createCache('Analysis', 60 * 60 * 1000);        // 1 hour\nconst sampleCache = createCache('Sample', 60 * 60 * 1000);        // 1 hour\nconst receiptCache = createCache('Receipt', 60 * 60 * 1000);        // 1 hour\n\n// SESSION & USER main functions\nasync function getSession(req) {\n    // Validate và lấy ra appUID + sessionUID + accessKey(nếu có)\n    const { headers } = req;\n    let appUID = headers?.['x-fh-app-uid'];\n    if (!appUID) throw new cError(400, \"Please provide appUID\")\n    if (!headers?.['authorization']) throw new cError(401, \"Please login to continue\")\n    const sessionUID = headers?.['authorization'].split(' ')[1] || headers?.['Authorization'].split(' ')[1];\n    const accessKey = headers?.['x-fh-access-key'] || env.get('s3Config')[appUID];    // USER or SERVER KEY\n\n    const startTime = Date.now();\n    try {\n        // TRY CACHE\n        const cacheKey = `Session:${sessionUID}`;      // Định danh cache\n        let cachedSession = sessionCache.get(cacheKey);   // Tìm cache\n        if (cachedSession) {\n            node.warn(`Cached session found: ${cacheKey}`);\n            return cachedSession;           // Trả về cache (nếu có)\n        }\n\n        // CONSTRUCT SESSION CLASS\n        const endpoint = \"https://pink.irdop.org/ab4dg2/auth/me\";\n        const headers = {\n            \"Content-Type\": `application/json`,\n            \"Authorization\": `Bearer ${sessionUID}`,   // từ user request\n            \"x-fh-app-uid\": appUID,                   // từ user request\n            \"x-fh-access-key\": accessKey,                // từ user request hoặc server setting\n        };\n\n        // GET SESSION INFO\n        const response = await axios.post(endpoint, {}, { headers });\n        const sessionInfo = convertCamelCase(response?.data);\n\n        if (!sessionInfo) throw new cError(401, 'Please login to continue');\n\n        // CONSTRUCT SESSION\n        const session = new Session(sessionInfo, headers);\n        await session.getUser();    // Preload user info\n        await session.getDb()       // Preload Database connection\n\n        // SET CACHE & RETURN\n        return sessionCache.set(cacheKey, session);\n    } catch (error) {\n        handleError(error, 'data-service.js.getSession');\n        throw error;\n    } finally {\n        trackPerformance('data-service.js.getSession', startTime);\n    }\n}\nasync function loginUser(req) {\n    const { body, headers } = req;\n    const { email, password } = body;\n    const startTime = Date.now();\n    try {\n        const appUID = headers?.['x-fh-app-uid'];\n        if (!email) throw new cError(400, \"Please provide email\");\n        if (!password) throw new cError(400, \"Please provide password\");\n        if (!appUID) throw new cError(400, \"No application is provided for your login session\");\n\n        node.warn(123123);\n        // GET SESSION\n        const response = await axios.post('https://pink.irdop.org/gre134e/auth/login', { email, password }, {\n            headers: {\n                'Content-Type': 'application/json',\n                'Accept': 'application/json',\n                'x-fh-app-uid': appUID\n            }\n        });\n\n        // RESPONSE\n        const sessionInfo = convertCamelCase(response?.data);\n        if (!sessionInfo) throw new cError(401, 'Failed to validate your credentials');\n\n        // CREATE SESSION ENTITY\n        const session = new Session(sessionInfo, headers);\n        await session.getUser();    // Preload user info\n        await session.getDb();      // Preload Database Pool\n        const cacheKey = `Session:${session.token}`;\n        sessionCache.set(cacheKey, session);\n        return session;\n    } catch (error) {\n        handleError(error, `data-service.js.loginUser [${email}]`);\n        throw error;\n    } finally {\n        trackPerformance(`data-service.js.loginUser [${email}]`, startTime, true);\n    }\n}\nasync function getUser(session) {\n    // Validate và lấy ra identityUID + email\n    if (typeof session !== 'object') throw new cError(400, 'session input must be an object');\n    const { identityUID, email } = session;\n    const startTime = Date.now();\n    try {\n        // TRY CACHE\n        const cacheKey = `User:${identityUID}`;    // Định danh cache\n        const userInfo = userCache.get(cacheKey) ? userCache.get(cacheKey) : async () => {\n            // GET USER INFO\n            const endpoint = \"https://pink.irdop.org/ab4dg2/get/iden\";\n            const body = { identity_uid: identityUID, email: email };\n            const headers = session.headers;\n            const response = await axios.post(endpoint, body, { headers });\n            const userInfo = convertCamelCase(response?.data);         // convert to camelCase format\n            if (!userInfo) throw new cError(404, 'User not found');\n\n            // Set cache & return\n            return userCache.set(cacheKey, userInfo);\n        }\n\n        // CREATE USER ENTITY\n        const user = new User(userInfo, session);\n        return user;\n    } catch (error) {\n        node.warn({ error });\n        handleError(error, 'data-service.js.getUser');\n        throw error;\n    } finally {\n        trackPerformance('data-service.js.getUser', startTime, true);\n    }\n}\nasync function getUserByInfo(identity, session) {\n    const startTime = Date.now();\n    try {\n        const { identityUID, email } = identity;\n        if (!identityUID && !email) throw new cError(400, \"Please provide identityUID or email\");\n\n        // TRY CACHE\n        const cacheKey = `User:${identityUID || email}`;   // Định danh cache\n        const cachedUser = userCache.get(cacheKey);          // Tìm cache\n        if (cachedUser) return cachedUser;                  // Trả về cache nếu có\n\n        // SEND REQUEST\n        const endpoint = \"https://pink.irdop.org/ab4dg2/get/iden\";\n        const body = { identity_uid: identityUID, email };\n        const headers = { ...session.headers };\n        const response = await axios.post(endpoint, body, { headers });\n\n        // CONVERT TO CAMEL CASE\n        const userInfo = convertCamelCase(response?.data);\n        if (!userInfo) throw new cError(404, 'User not found');\n\n        // RETURN USER ENTITY & CACHE\n        const user = new User(userInfo, session);\n        userCache.set(cacheKey, user);\n        return user;\n    } catch (error) {\n        handleError(error, 'data-service.js.getUser');\n        throw error;\n    } finally {\n        trackPerformance('getUser', startTime, true);\n    }\n\n}\nasync function newUser(req, session) {\n    const { identityName, email } = req?.body;\n    // Với user phải có identityName và email (Bot/Server thì không cần)\n    if (!identityName) throw new cError(400, \"Please provide identity name\");\n    if (!email) throw new cError(400, \"Please provide email\");\n\n    const startTime = Date.now();\n    try {\n        // TRY CACHE\n        const cacheKey = `User:${identityName}:${email}`;    // Định danh cache\n        const cachedUser = userCache.get(cacheKey);   // Tìm cache\n        if (cachedUser) throw new cError(400, 'User already exists'); // User đã tồn tại\n\n        // PREPARE RELATIONS\n        const { relations } = req.body;     // Lấy relations từ POST request\n        if (Array.isArray(relations) && relations.length > 0) {\n            // Format relations to match the API\n            relations.forEach(relation => {\n                return {\n                    relation_name: session.appUID, // gán appUID cho relation_name\n                    ...relation\n                };\n            });\n        }\n\n        // POST NEW USER\n        const newUser = await axios.post('https://pink.irdop.org/ab4dg2/insert/iden', {\n            identity_name: identityName,                // Bắt buộc\n            email: email,                               // Bắt buộc\n            password: req.body.password,\n            identity_contact: req.body.identityContact || {},\n            telegram_peer: req.body.telegramPeer || {},\n            zalo_user_id: req.body.zaloUserId || \"\",\n            relations: relations || [],\n        }, {\n            headers: {\n                ...session.headers,            // session built-in headers\n            }\n        });\n\n        const userInfo = convertCamelCase(newUser?.data);\n        // Failed to create user\n        if (!userInfo) throw new cError(400, 'Failed to create a new user');\n\n        // CREATE USER ENTITY\n        const user = new User(userInfo, session);\n        userCache.set(cacheKey, user);   // Cache user\n        return user;\n    } catch (error) {\n        handleError(error, 'newUser');\n        throw error;\n    } finally {\n        trackPerformance(`newUser [${identityName} - ${email}]`, startTime, true);\n    }\n}\n\n// SAMPLE & ANALYSIS\n\n// TODO: GET analysis, sample, receipt\n// TODO: GET fileUpLink, fileInfo, fileDownLink\n\nglobal.set('data-service.js', {\n    getSession,\n    getUser,\n    getUserByInfo,\n    loginUser,\n    newUser,\n})\nnode.status({ fill: 'green', shape: 'dot', text: 'OK' });\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "pg",
-                "module": "pg"
-            }
-        ],
-        "x": 1310,
-        "y": 660,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "9f87f39705146579",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "cache",
-        "func": "node.status({fill: 'yellow', shape: 'dot', text: '...'});\n\nconst CacheWorld = {}; // global.get('CacheWorld') || {}; <--- dòng code comment này làm leak context giữa các deploy (??)\nglobal.set('CacheWorld', CacheWorld);\n\n\nfunction createCache(cacheName, ttl = 6 * 60 * 1000) {\n    // Validate inputs\n    if (CacheWorld[cacheName]) {\n        node.warn(`[ CAUTION ] Cache name \"${cacheName}\" already exists. Use a different name if intended.`);\n        return CacheWorld[cacheName];\n    }\n    if (typeof ttl !== 'number' || ttl < 0) {\n        throw new Error('Invalid TTL value. It must be a positive number.');\n    }\n    if (!cacheName || typeof cacheName !== 'string') {\n        throw new Error('Cache name is required and must be a string.');\n    }\n\n    const store = new Map();\n    const cache = {\n        ttl,\n        get(key) {\n            const entry = store.get(key);\n            if (!entry) return null;\n            if (this.ttl > 0 && Date.now() - entry.timestamp > this.ttl) {\n                node.warn(`Cache entry \"${key}\" has expired. Cleaning up...`);\n                store.delete(key);\n                return null;\n            }\n            return entry.value;\n        },\n        set(key, value) {\n            store.set(key, { value, timestamp: Date.now() });\n            return value;\n        },\n        has(key) {\n            return store.has(key);\n        },\n        size() {\n            return store.size;\n        },\n        keys() {\n            return Array.from(store.keys());\n        },\n        delete(key) {\n            const entry = store.get(key);\n            if (!entry) return false;\n            if (entry.value && typeof entry.value.clear === 'function') {\n                entry.value.clear();\n            }\n            store.delete(key);\n            return true;\n        },\n        clear() {\n            for (const [, entry] of store) {\n                if (entry.value && typeof entry.value.clear === 'function') {\n                    entry.value.clear();\n                }\n            }\n            store.clear();\n            return true;\n        },\n        getAll() {\n            return Object.fromEntries(Array.from(store, ([key, entry]) => [key, entry.value]));\n        },\n        entries() {\n            return Array.from(store.entries());\n        },\n    };\n\n    CacheWorld[cacheName] = cache;\n    return cache;\n}\n\nfunction getCache(cacheName) {\n    return CacheWorld?.[cacheName];\n}\n\n// CACHE CLEANER\nconst cleaner = setInterval(() => {\n    let totalCleaned = 0;\n    let memoryCleaned = 0;\n    let nameCleaned = [];\n\n    for (const cacheName in CacheWorld) {\n        const cache = CacheWorld[cacheName];\n        if (!cache || cache.size() === 0) continue;\n\n        for (const [key, entry] of cache.entries()) {\n            try {\n                const cacheTTL = cache.ttl || 0;\n                if (cacheTTL > 0 && entry.timestamp + cacheTTL < Date.now()) {\n                    // Clean nested caches if they exist\n                    if (entry.value && typeof entry.value.clear === 'function') {\n                        entry.value.clear();\n                    }\n\n                    // Estimate memory cleaned (rough approximation)\n                    memoryCleaned += JSON.stringify(entry.value).length || 0;\n\n                    // Delete expired entry\n                    cache.delete(key);\n                    totalCleaned++;\n                    nameCleaned.push(key);\n                }\n            } catch (error) {\n                node.error(`Error cleaning cache entry: ${key} in ${cacheName}`, error);\n            }\n        }\n\n        // Remove empty caches from CacheWorld\n        if (cache.size() === 0) {\n            delete CacheWorld[cacheName];\n        }\n    }\n\n    if (totalCleaned > 0) {\n        node.warn(`Cache cleaner removed ${totalCleaned} entries from ${Object.keys(CacheWorld).length} caches. Memory cleaned: ${memoryCleaned} bytes. Cache names: ${nameCleaned.join(', ')}`);\n    }\n}, 5 * 60 * 1000); // every 5 minutes\n\n\nglobal.set('cache.js', {\n    createCache,\n    getCache,\n    CacheWorld,\n});\n\nnode.warn('Cache cleaner is scheduled');\nnode.status({fill: 'green', shape: 'dot', text: 'OK'});\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 470,
-        "y": 540,
-        "wires": [
-            [
-                "b42f210e0a7ac078"
-            ]
-        ]
-    },
-    {
-        "id": "b42f210e0a7ac078",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "utilities",
-        "func": "node.status({fill: 'yellow', shape: 'dot', text: '...'});\nconst { createCache } = global.get('cache.js');\nconst performanceData = createCache('performanceData', 0); // No expiration\nconst axios = global.get('axios');\n\nclass cError extends Error {\n    constructor(statusCode, properties, rethrow = true) {\n        if (typeof properties === 'string') {\n            properties = { message: properties, statusCode, rethrow };\n        }\n        else if (typeof properties === 'object') {\n            properties = {\n                message: properties.message || 'An error occurred',\n                statusCode: properties.statusCode || properties.code || 500,\n                rethrow: rethrow || properties.rethrow || false,\n            };\n        }\n        else {\n            properties = { message: 'An error occurred', statusCode, rethrow };\n        }\n        super(properties.message);\n\n        // Capture the stack trace\n        if (Error.captureStackTrace) {\n            Error.captureStackTrace(this, cError);\n        }\n        this.statusCode = statusCode || 500;\n        this.catchCount = 0;\n    }\n}\n\nfunction handleError(error, functionName, rethrow = false) {\n    if (error.catchCount++ === 0) {\n        node.warn(`${error.message} (caused at ${functionName})\\n${error.stack}`);\n    }\n    return error;\n}\n\nfunction trackPerformance(functionName, startTime, isSuccess = true) {\n    const elapsedTime = Date.now() - startTime;\n    const currentData = performanceData.get(functionName) || { count: 0, totalTime: 0, successCount: 0, errorCount: 0 };\n    currentData.count += 1;\n    currentData.totalTime += elapsedTime;\n    if (isSuccess) {\n        currentData.successCount += 1;\n    } else {\n        currentData.errorCount += 1;\n    }\n    performanceData.set(functionName, currentData);\n    return currentData;\n}\n\nfunction printPerformanceData() {\n    const data = performanceData.getAll();\n    let message = 'Performance Data:\\n';\n    let messageList = [];\n    for (const [functionName, { count, totalTime, successCount, errorCount }] of Object.entries(data)) {\n        const averageTime = totalTime / count;\n        messageList.push(`Function: ${functionName}, Calls: ${count}, Total Time: ${totalTime}ms, Average Time: ${averageTime.toFixed(2)}ms, Success: ${successCount}, Errors: ${errorCount}\\n`);\n    }\n    if (messageList.length > 0)\n        message += messageList.join('');\n    else\n        message += 'No data.';\n    node.warn(message);\n}\n\nasync function testPoolConnection(pool) {\n    try {\n        await pool.query('SELECT 1');\n        return true;\n    } catch (error) {\n        return false;\n    }\n}\n\nasync function getColumnValues(tableName, pool, data) {\n    try {\n        const result = await pool.query(\n            `SELECT column_name FROM information_schema.columns WHERE table_name = $1`,\n            [tableName]\n        );\n        const allColumns = result.rows.map(row => row.column_name);\n\n        const columns = [];\n        const values = [];\n        for (const column of allColumns) {\n            if (data.hasOwnProperty(column)) {\n                columns.push(column);\n                values.push(data[column]);\n            }\n        }\n\n        return { columns, values };\n    } catch (error) {\n        handleError('file-access.getColumnValues', error, true);\n    }\n}\n\nfunction convertSnakeCase(input) {\n    // if (typeof input === 'string') {\n    //     // Check if the string is already in snake_case\n    //     if (!/[A-Z]/.test(input)) {\n    //         return input; // Return as-is if no uppercase letters are found\n    //     }\n    //     // Convert camelCase string to snake_case\n    //     return input.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()\n    //         .replace(/(?<![a-z])UID(?![a-z])/g, '_uid'); // Special case for UID, ensuring it's not part of a larger word\n    // } else \n    if (typeof input === 'object' && input !== null) {\n        if (Array.isArray(input)) {\n            // If it's an array, recursively process each element\n            return input.map(item => convertSnakeCase(item));\n        } else {\n            // If it's an object, process each key and value\n            return Object.keys(input).reduce((acc, key) => {\n                const snakeKey = key.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()\n                    .replace(/(?<![a-z])UID(?![a-z])/g, '_uid'); // Special case for UID, ensuring it's not part of a larger word\n                acc[snakeKey] = convertSnakeCase(input[key]);\n                return acc;\n            }, {});\n        }\n    }\n    // Return other data types as-is\n    return input;\n}\n\nfunction convertCamelCase(input) {\n    // if (typeof input === 'string') {\n    //     // Handle special case for _uid first\n    //     input = input.replace(/_uid/g, 'UID');\n\n    //     // Check if the string is already in camelCase\n    //     if (!/_/.test(input) || input.length > 3 && input?.slice(0,3) === 'sx_') {\n    //         return input; // Return as-is if no underscores are found\n    //     }\n\n    //     // Convert snake_case string to camelCase\n    //     return input.replace(/_([a-z])/g, (g) => g[1].toUpperCase());\n    // } else \n    if (typeof input === 'object' && input !== null) {\n        if (Array.isArray(input)) {\n            // If it's an array, recursively process each element\n            return input.map(item => convertCamelCase(item));\n        } else {\n            // If it's an object, process each key and value\n            return Object.keys(input).reduce((acc, key) => {\n                const camelKey = key.replace(/_uid/g, 'UID')\n                    .replace(/_([a-z])/g, (g) => g[1].toUpperCase());\n                acc[camelKey] = convertCamelCase(input[key]);\n                return acc;\n            }, {});\n        }\n    }\n    // Return other data types as-is\n    return input;\n}\n\nglobal.set('utilities.js', {\n    handleError,\n    trackPerformance,\n    printPerformanceData,\n    cError,\n    testPoolConnection,\n    getColumnValues,\n    convertSnakeCase,\n    convertCamelCase\n});\n\nnode.status({fill: 'green', shape: 'dot', text: 'OK'});\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 560,
-        "y": 580,
-        "wires": [
-            [
-                "c17d5fe3d4f22ac8"
-            ]
-        ]
-    },
-    {
-        "id": "3c44d6ac587aae73",
-        "type": "inject",
-        "z": "7c3157bf68c1b848",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 595,
-        "y": 620,
-        "wires": [
-            [
-                "c17d5fe3d4f22ac8"
-            ]
-        ],
-        "l": false
-    },
-    {
-        "id": "4d5d788611c88d5b",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "document.js",
-        "func": "\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1310,
-        "y": 620,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c17d5fe3d4f22ac8",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "repo.js",
-        "func": "const { trackPerformance, cError, handleError } = global.get('utilities.js');\nconst { createCache, getCache } = global.get('cache.js');\nconst { Client } = minio;\nconst { Pool } = pg;\nconst { v4: uuidv4 } = uuid \nconst columnCache = createCache(\"ColumnCache\", 60 * 60 * 1000) || getCache(\"ColumnCache\");\n\n// Hàm trợ giúp để xử lý lỗi và đo hiệu suất\nconst withPerformance = async (methodName, fn) => {\n    const startTime = Date.now();\n    try {\n        const result = await fn();\n        trackPerformance(methodName, startTime, true);\n        return result;\n    } catch (error) {\n        handleError(methodName, error);\n        node.warn(`[Error] ${methodName}: ${error.message}`);\n        trackPerformance(methodName, startTime, false);\n        return null;\n    }\n};\n\nclass ObjectConnection extends Client {\n    #db;\n    #defaultBucket;\n    #session;\n\n    constructor(options, session) {\n        super(options);\n        this.#session = session;\n        this.#db = session.db;\n        this.#defaultBucket = options.bucket \n    }\n\n    get identityUID() { return this.#session.identityUID; }\n    get identityName() { return this.#session.identityName; }\n    get defaultBucket() { return this.#defaultBucket; }\n\n    async upsertS3Object(s3ObjectData) {\n        return withPerformance(\"ObjectConnection.upsertS3Object\", async () => {\n            if (!s3ObjectData?.fileUID) throw new cError(400, 'Missing fileUID for S3Object upsert');\n\n            const { columns, values } = await this.#session.db.getColumnValues(\"S3Object\", s3ObjectData);\n            if (!columns.length) return null;\n\n            const updateColumns = columns.filter(col => !['fileUID', 'bucketName', 'objectName'].includes(col));\n            const updateSetClauses = updateColumns.map((col, i) => `\"${col}\" = $${i + 1 + values.length}`);\n            const updateValues = updateColumns.map(col => s3ObjectData[col]);\n            const query = `\n                INSERT INTO \"S3Object\" (${columns.map(col => `\"${col}\"`).join(', ')})\n                VALUES (${columns.map((_, i) => `$${i + 1}`).join(', ')})\n                ON CONFLICT (\"fileUID\") DO UPDATE SET\n                    ${updateSetClauses.join(', ') || 'fileUID = EXCLUDED.\"fileUID\"'}\n                RETURNING *;\n            `;\n            const result = await this.#session.db.query(query, [...values, ...updateValues]);\n            return result?.rows[0];\n        });\n    }\n\n    async insertAuditRecord(auditData) {\n        return withPerformance(\"ObjectConnection.insertAuditRecord\", async () => {\n            if (!auditData?.action || !auditData?.entityType || !auditData?.entityUID) {\n                throw new cError(400, 'Missing required audit data: action, entityType, entityUID');\n            }\n\n            auditData.performedByIdentityUID = auditData.performedByIdentityUID || this.identityUID;\n            if (auditData.details && typeof auditData.details !== 'string') {\n                auditData.details = JSON.stringify(auditData.details);\n            }\n\n            const { columns, values } = await this.#session.db.getColumnValues(\"AuditTrail\", auditData);\n            if (!columns.length) return null;\n\n            const query = `\n                INSERT INTO \"AuditTrail\" (${columns.map(col => `\"${col}\"`).join(', ')})\n                VALUES (${columns.map((_, i) => `$${i + 1}`).join(', ')})\n                RETURNING *;\n            `;\n            const result = await this.#session.db.query(query, values);\n            return result?.rows[0];\n        });\n    }\n\n    async getUpLink(fileInfo, objectName, expiry = 604800) {\n        return withPerformance(\"ObjectConnection.getUpLink\", async () => {\n            objectName = objectName || this.genFileUID();\n            const s3ObjectData = {\n                fileUID: objectName,\n                bucketName: this.#defaultBucket,\n                objectName,\n                identityUID: this.identityUID,\n                fileInfo: fileInfo ? JSON.stringify(fileInfo) : null\n            };\n\n            const s3ObjectRecord = await this.upsertS3Object(s3ObjectData);\n            if (!s3ObjectRecord)  throw new cError(500, 'Failed to upsert S3Object record');\n\n            const url = await this.presignedPutObject(this.#defaultBucket, objectName, expiry);\n            const expiresAt = new Date(Date.now() + expiry * 1000);\n\n            const result = await this.insertPresignRecord({\n                presignedUrlID: uuidv4(),\n                s3ObjectUID: objectName,\n                url,\n                expiresAt,\n                requestedByIdentityUID: this.identityUID\n            });\n\n            return { url, objectName };\n        });\n    }\n\n    async getDownLink(fileInfo, objectName, expiry = 604800) {\n        return withPerformance(\"ObjectConnection.getDownLink\", async () => {\n            const checkObjectQuery = `SELECT * FROM \"S3Object\" WHERE \"fileUID\" = $1 OR \"objectName\" = $1 LIMIT 1`;\n            const objectResult = await this.#session.db.query(checkObjectQuery, [objectName]);\n            const s3ObjectRecord = objectResult?.rows[0];\n            if (!s3ObjectRecord) throw new cError(404, `Object not found: ${objectName}`);\n\n            const url = await this.presignedGetObject(this.#defaultBucket, s3ObjectRecord.objectName, expiry);\n            const expiresAt = new Date(Date.now() + expiry * 1000);\n\n            await this.insertPresignRecord({\n                presignedUrlID: uuidv4(),\n                s3ObjectUID: s3ObjectRecord.fileUID,\n                url,\n                expiresAt,\n                requestedByIdentityUID: this.identityUID\n            });\n\n            await this.insertAuditRecord({\n                action: 'DOWNLOAD_LINK_CREATED',\n                entityType: 'S3Object',\n                entityUID: s3ObjectRecord.fileUID,\n                details: {\n                    bucketName: s3ObjectRecord.bucketName,\n                    objectName: s3ObjectRecord.objectName,\n                    expiresAt: expiresAt.toISOString()\n                }\n            });\n\n            return { url, objectInfo: s3ObjectRecord };\n        });\n    }\n\n    async insertPresignRecord(options) {\n        return withPerformance(\"ObjectConnection.insertPresignRecord\", async () => {\n            if (!options.s3ObjectUID) throw new cError(400, 'Missing s3ObjectUID');\n            options.presignedUrlID = options.presignedUrlID || uuidv4();\n            if (typeof options.expiresAt === 'number') {\n                options.expiresAt = new Date(Date.now() + options.expiresAt * 1000);\n            }\n            delete options.expiresIn;\n\n            const { columns, values } = await this.#session.db.getColumnValues(\"S3PresignedUrl\", options);\n            if (!columns.length) return null;\n\n            const query = `\n                INSERT INTO \"S3PresignedUrl\" (${columns.map(col => `\"${col}\"`).join(', ')})\n                VALUES (${columns.map((_, i) => `$${i + 1}`).join(', ')})\n                RETURNING *;\n            `;\n            const result = await this.#session.db.query(query, values);\n\n            await this.insertAuditRecord({\n                action: 'PRESIGN_URL_CREATED',\n                entityType: 'S3PresignedUrl',\n                entityUID: options.presignedUrlID,\n                details: {\n                    s3ObjectUID: options.s3ObjectUID,\n                    expiresAt: options.expiresAt?.toISOString()\n                }\n            });\n\n            return result?.rows[0];\n        });\n    }\n\n    async onUploadComplete(options) {\n        return withPerformance(\"ObjectConnection.onUploadComplete\", async () => {\n            const { s3ObjectUID, fileInfo, eTag, versionID } = options;\n            if (!s3ObjectUID) throw new cError(400, 'Missing s3ObjectUID');\n\n            const query = `\n                SELECT p.*, o.* FROM \"S3PresignedUrl\" p\n                JOIN \"S3Object\" o ON p.\"s3ObjectUID\" = o.\"fileUID\"\n                WHERE p.\"s3ObjectUID\" = $1\n                LIMIT 1\n            `;\n            const result = await this.#session.db.query(query, [s3ObjectUID]);\n            const presignedUrlRecord = result?.rows[0];\n            if (!presignedUrlRecord) throw new cError(404, `No record found for object: ${s3ObjectUID}`);\n\n            const updatedS3ObjectData = {\n                fileUID: s3ObjectUID,\n                eTag: eTag || null,\n                versionID: versionID || null,\n                fileInfo: fileInfo ? JSON.stringify(fileInfo) : presignedUrlRecord.fileInfo\n            };\n            const s3ObjectUpdateResult = await this.upsertS3Object(updatedS3ObjectData);\n            if (!s3ObjectUpdateResult) throw new cError(500, 'Failed to update S3Object record');\n\n            const documentData = {\n                documentUID: uuidv4(),\n                className: 'FileDocument',\n                data: JSON.stringify({\n                    fileUID: s3ObjectUID,\n                    bucketName: presignedUrlRecord.bucketName,\n                    objectName: presignedUrlRecord.objectName,\n                    fileInfo: fileInfo || presignedUrlRecord.fileInfo,\n                    uploadedBy: this.identityUID\n                })\n            };\n            const { columns, values } = await this.#session.db.getColumnValues(\"Document\", documentData);\n            const insertDocumentQuery = `\n                INSERT INTO \"Document\" (${columns.map(col => `\"${col}\"`).join(', ')})\n                VALUES (${columns.map((_, i) => `$${i + 1}`).join(', ')})\n                RETURNING *;\n            `;\n            const documentResult = await this.#session.db.query(insertDocumentQuery, values);\n\n            await this.insertAuditRecord({\n                action: 'FILE_UPLOAD_COMPLETE',\n                entityType: 'S3Object',\n                entityUID: s3ObjectUID,\n                details: {\n                    bucketName: presignedUrlRecord.bucketName,\n                    objectName: presignedUrlRecord.objectName,\n                    documentUID: documentData.documentUID\n                }\n            });\n\n            return { s3Object: s3ObjectUpdateResult, document: documentResult.rows[0] };\n        });\n    }\n\n    async onUploadFailure(options) {\n        return withPerformance(\"ObjectConnection.onUploadFailure\", async () => {\n            const { s3ObjectUID, reason } = options;\n            if (!s3ObjectUID) throw new cError(400, 'Missing s3ObjectUID');\n\n            const s3ObjectQuery = `SELECT * FROM \"S3Object\" WHERE \"fileUID\" = $1 LIMIT 1`;\n            const s3ObjectResult = await this.#session.db.query(s3ObjectQuery, [s3ObjectUID]);\n            const s3Object = s3ObjectResult?.rows[0];\n            if (!s3Object) throw new cError(404, `No S3Object record found for: ${s3ObjectUID}`);\n\n            await this.insertAuditRecord({\n                action: 'FILE_UPLOAD_FAILED',\n                entityType: 'S3Object',\n                entityUID: s3ObjectUID,\n                details: {\n                    bucketName: s3Object.bucketName,\n                    objectName: s3Object.objectName,\n                    reason: reason || 'Unknown failure'\n                }\n            });\n\n            const deletePresignQuery = `DELETE FROM \"S3PresignedUrl\" WHERE \"s3ObjectUID\" = $1 RETURNING *`;\n            const deletedPresign = await this.#session.db.query(deletePresignQuery, [s3ObjectUID]);\n\n            return { deletedPresignUrls: deletedPresign.rows.length };\n        });\n    }\n\n    genFileUID() {\n        return `file_${(new Date().getFullYear() + '').slice(-2)}${uuidv4().replace(/-/g, '').slice(0, 12)}`;\n    }\n\n    async getPresignedGet(objectName, expiry = 604800, reqParams, requestDate) {\n        return withPerformance(\"ObjectConnection.getPresignedGet\", async () => {\n            const url = await this.presignedUrl(\"GET\", this.#defaultBucket, objectName, expiry, reqParams, requestDate);\n            node.warn(`[s3Client] Generated presigned GET URL: ${url}`);\n            return url;\n        });\n    }\n\n    async getPresignedPutUrl(objectName, expiry = 600, metaData = {}) {\n        return withPerformance(\"ObjectConnection.getPresignedPutUrl\", async () => {\n            node.warn(`[s3Client] Generating presigned PUT URL for bucket: ${this.#defaultBucket}, object: ${objectName}`);\n            const url = await this.presignedPutObject(this.#defaultBucket, objectName, expiry, metaData);\n            node.warn(`[s3Client] Generated presigned PUT URL: ${url}`);\n            return url;\n        });\n    }\n}\n\nclass DataConnection extends Pool {\n    #config;\n    #session;\n\n    constructor(config, session) {\n        // config.password = config.pw;\n        super(config);\n        this.#config = config;\n        this.#session = session;\n    }\n\n    get dbName() { return this.#config?.name; }\n    get identityUID() { return this.#session?.identityUID; }\n    get defaultBucket() { return this.#session?.s3Bucket; }\n\n    async getColumnValues(tableName, data) {\n        return withPerformance(`${this.constructor.name}.getColumnValues`, async () => {\n            const cacheKey = `${this.dbName}:${tableName}`;\n            let columns = columnCache.get(cacheKey);\n            if (!columns) {\n                columns = (await this.query(\n                    `SELECT column_name FROM information_schema.columns WHERE table_name = $1`,\n                    [tableName]\n                )).rows.map(row => row.column_name);\n                columnCache.set(cacheKey, columns);\n            }\n\n            const result = { columns: [], values: [] };\n            for (const column of columns) {\n                if (column in data) {\n                    result.columns.push(column);\n                    result.values.push(data[column]);\n                }\n            }\n            node.warn(`[${this.constructor.name}.getColumnValues] Columns for ${tableName}: ${result.columns.join(', ')}`);\n            return result;\n        });\n    }\n\n    async testConnection() {\n        node.warn(`[${this.constructor.name}] Testing connection to ${this.dbName} database`);\n        try {\n            await this.query('SELECT 1');\n            return true;\n        } catch (error) {\n            return error;\n        }\n    }\n}\n\nglobal.set('repo.js', { ObjectConnection, DataConnection });\nnode.status({ fill: 'green', shape: 'dot', text: 'OK' });\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "minio",
-                "module": "minio"
-            },
-            {
-                "var": "pg",
-                "module": "pg"
-            },
-            {
-                "var": "uuid",
-                "module": "uuid"
-            }
-        ],
-        "x": 710,
-        "y": 620,
-        "wires": [
-            [
-                "d8cffdb3b9561826"
-            ]
-        ]
-    },
-    {
-        "id": "d8cffdb3b9561826",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "function 22",
-        "func": "const { trackPerformance, cError, handleError } = global.get('utilities.js') || {\n    trackPerformance: (name, start, success) => { node.warn(`[PERF] ${name}: ${Date.now() - start}ms (Success: ${success})`); },\n    cError: class extends Error { constructor(code, message) { super(message); this.code = code; } },\n    handleError: (context, error, shouldThrow) => { node.error(`[ERROR] ${context}: ${error.message}`); if (shouldThrow) throw error; }\n};\nconst { getSession } = global.get(\"data-service.js\");\nconst columnCache = global.get('cache.js')?.getCache(\"ColumnCache\") || new Map(); // Get existing cache or provide a simple mock\nconst repo = global.get('repo.js');\nconst { v4: uuidv4 } = uuid \nif (!repo || !repo.ObjectConnection || !repo.DataConnection) {\n    node.error(\"Required classes (ObjectConnection, DataConnection) not found in global context. Ensure the setup node ('node_red_test_node') is deployed and runs successfully first.\");\n    node.status({ fill: 'red', shape: 'dot', text: 'Repo Classes Not Found' });\n    return null; // In Node-RED, returning null stops message propagation\n}\n\nconst { ObjectConnection, DataConnection } = repo;\nconst req = {};\nreq.headers = {};\nreq.headers.authorization = \"Bearer sx_58364de7a7b24a0283d6ad95443f4bf2400f17a8b1264c16835325095b0b5e75317a12f9846d426f85745652c85e\"\nreq.headers['x-fh-app-uid'] = \"LIMS-IRDOP-PRD\";\n// Example usage:\nconst fileInfo = {\n  fileName: \"document.pdf\",\n  fileSize: 1024 * 500, // 500 KB\n  fileType: \"application/pdf\",\n  filePath: \"/document.pdf\",\n  uploadDate: new Date(\"2025-05-18T10:00:00Z\"),\n};\n\n\nconst payload = {\n  data:{\n  \"fileUID\": uuidv4(), // Example UUID generated by genFileUID()\n  \"identityUID\": uuidv4(), // Optional: UUID of the user who owns/uploaded the file\n  \"appUID\": null, // Optional: UUID of the application associated with the file\n  \"fileInfo\": { // Optional: JSONB object for additional file metadata\n    \"fileName\": \"my_document.pdf\",\n    \"fileSize\": 102400, \n    \"contentType\": \"application/pdf\",\n    \"uploadDate\": \"2025-05-20T09:30:00Z\"\n  },\n  \"bucketName\": \"your-default-bucket\", // The bucket where the object resides\n  \"objectName\": uuidv4(), // Usually same as fileUID for unique object names\n  \"versionID\": uuidv4(), // Optional: Minio/S3 version ID if versioning is enabled\n  \"eTag\": \"d41d8cd98f00b204e9800998ecf8427e\" // Optional: ETag of the uploaded object\n  }\n};\nconst minioOptions = {\n       \"endPoint\": \"s3.irdop.org\",\n        \"port\": 443,\n        \"useSSL\": true,\n        \"accessKey\": \"KH0I7XQM9XrN5bwaeX7d\",\n        \"secretKey\": \"ZrWVaLJKCieBcj5L90BynImIKDSeNrTr4M0yOtOd\",\n        \"bucket\": \"irdop\"\n};\nconst dbOptions = {\n    \"name\": \"LIMS\", // Tên tùy chọn này không được sử dụng trực tiếp bởi pg\n    user: \"postgres\", // Tên người dùng database\n    host: \"red.irdop.org\", // Địa chỉ host database\n    password: \"exploring-dynasty-system\", // Mật khẩu database (sử dụng 'password' thay vì 'pw' cho pg)\n    port: 5432, // Cổng kết nối database\n    database: \"LIMS\", // Tên cơ sở dữ liệu cụ thể bạn muốn kết nối\n    pw:\"exploring-dynasty-system\"\n};\nlet session = await getSession(req);\n\n//const result = await session.db.testConnection()\n// Initialize connections using the classes retrieved from global context\nlet objectConnection = null;\nlet dataConnection = null;\n\ntry {\n    dataConnection = new DataConnection(dbOptions, session);\n    req.headers = {};\n    req.headers.authorization = \"Bearer sx_58364de7a7b24a0283d6ad95443f4bf2400f17a8b1264c16835325095b0b5e75317a12f9846d426f85745652c85e\"\n    req.headers['x-fh-app-uid'] = \"LIMS-IRDOP-DEV\";\n    session = await getSession(req)\n    session.db=dataConnection\n    objectConnection = new ObjectConnection(minioOptions, session );\n} catch (initError) {\n    node.warn( initError);\n    node.status({ fill: 'red', shape: 'dot', text: 'Init Failed' });\n}\n\nlet topic = \"getUpLink\"\n\n    try {\n        let result = null;\n        switch (topic) {\n            case 'testConnection':\n                node.warn(\"Testing DataConnection...\");\n                result = await dataConnection.testConnection();\n                node.warn(result);\n                break;\n\n            case 'getColumnValues':\n                // payload should be { tableName: '...', data: { ... } }\n                if (payload && payload.tableName && payload.data) {\n                    node.warn(`Testing getColumnValues for table: ${payload.tableName}`);\n                    result = await dataConnection.getColumnValues(payload.tableName, payload.data);\n                   node.warn( await dataConnection.end())\n                } else {\n                    throw new Error(\"Invalid payload for getColumnValues. Expected { tableName, data }\");\n                }\n                break;\n\n            case 'getUpLink':\n                if (true) {\n                    node.warn(`Testing getUpLink for object: ${payload.data.objectName}`);\n                    \n                    const fileInfo = payload.data.fileInfo || { fileName: payload.objectName, fileMime: 'application/octet-stream' };\n                                                    // getUpLink(fileInfo, objectName, expiry = 604800, reqParams, requestDate)\n                    result = await objectConnection.getUpLink(fileInfo, payload.data.objectName, payload.data.expiry, payload.data.reqParams, payload.data.requestDate);\n                     node.warn(result)\n                } else {\n                    throw new Error(\"Invalid payload for getUpLink. Expected { objectName, ... }\");\n                }\n                break;\n\n            case 'getDownLink':\n                // payload should be { fileInfo: { ... }, objectName: '...' }\n                if (true) {\n                    node.warn(`Testing getDownLink for object: ${payload.objectName}`);\n                    // Pass dummy fileInfo if not provided\n                    const fileInfo = payload.fileInfo || { fileName: payload.objectName, fileMime: 'application/octet-stream' };\n                    result = await objectConnection.getDownLink(fileInfo, payload.objectName, payload.expiry, payload.reqParams, payload.requestDate);\n                    node.warn(result);\n                } else {\n                    throw new Error(\"Invalid payload for getDownLink. Expected { objectName, ... }\");\n                }\n                break;\n\n            case 'genFileUID':\n                node.warn(\"Testing genFileUID...\");\n                result = objectConnection.genFileUID();\n                node.warn(result);\n                break;\n\n            case 'insertPresignRecord':\n                if (true) {\n                    payload.tableName=\"s3_object\"\n                //    payload.data={\n                //        'presignedUrlID': uuidv4(), \n                //        'createdAt': '2024-10-15T15:00:00Z', // \n                //        's3ObjectUID': uuidv4(), \n                //        'url': 'https://your-bucket-name.s3.amazonaws.com/path/to/object.jpg?AWSAccessKeyId=...&Expires=...&Signature=...', \n                //        'expiresIn': 6000, \n                //        'requestedByIdentityUID': uuidv4() \n                //    }\n                    let result = await objectConnection.insertPresignRecord(payload.data)\n                   // let result = await dataConnection.getColumnValues(\"S3PresignedUrl\",payload.data)\n\n                    node.warn(result);\n                 } else {\n                    throw new Error(\"Invalid payload for insertPresignRecord. Expected { objectName, url, expiry, ... }\");\n                }\n                break;\n\n            case 'onUploadComplete':\n                // payload should contain info about the completed upload\n                if (payload) {\n                    node.warn(\"Testing onUploadComplete...\");\n                    await objectConnection.onUploadComplete(payload);\n                    result = { status: \"onUploadComplete called\" };\n                } else {\n                    throw new Error(\"Invalid payload for onUploadComplete.\");\n                }\n                break;\n\n            case 'onUploadFailure':\n                // payload should contain info about the failed upload\n                if (payload) {\n                    node.warn(\"Testing onUploadFailure...\");\n                    await objectConnection.onUploadFailure(payload);\n                    result = { status: \"onUploadFailure called\" };\n                } else {\n                    throw new Error(\"Invalid payload for onUploadFailure.\");\n                }\n                break;\n\n\n            default:\n                node.warn(`Unknown topic: ${topic}. No action taken.`);\n                result = { status: `Unknown topic: ${topic}` };\n        }\n\n        // Send the result in the output message\n        msg.payload = result;\n        node.warn(\"end this connection\")\n        //await dataConnection.end()\n    } catch (error) {\n        node.warn(error);\n        node.error(`Error processing message with topic ${topic}:`, error);\n        msg.payload = { error: error.message };\n        node.send(msg);\n    }\n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "minio",
-                "module": "minio"
-            },
-            {
-                "var": "pg",
-                "module": "pg"
-            },
-            {
-                "var": "uuid",
-                "module": "uuid"
-            }
-        ],
-        "x": 730,
-        "y": 700,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "2e4fc5ed1e6010ed",
-        "type": "inject",
-        "z": "7c3157bf68c1b848",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 500,
-        "y": 280,
-        "wires": [
-            [
-                "b786a866f377844f"
-            ]
-        ]
-    },
-    {
-        "id": "b786a866f377844f",
-        "type": "function",
-        "z": "7c3157bf68c1b848",
-        "name": "function 21",
-        "func": "const dbOptions = {\n    // \"name\": \"LIMS\", // Tên tùy chọn này không được sử dụng trực tiếp bởi pg\n    user: \"postgres\", // Tên người dùng database\n    host: \"red.irdop.org\", // Địa chỉ host database\n    password: \"exploring-dynasty-system\", // Mật khẩu database (sử dụng 'password' thay vì 'pw' cho pg)\n    port: 5432, // Cổng kết nối database\n    database: \"LIMS\" // Tên cơ sở dữ liệu cụ thể bạn muốn kết nối\n};\n(async function() {\n    node.status({ fill: 'yellow', shape: 'dot', text: 'Connecting to DB...' });\n    node.log(`Attempting direct connection to database: ${dbOptions.database} at ${dbOptions.host}:${dbOptions.port}`);\n\n    let pool; \n    try {\n        pool = new pg.Pool(dbOptions);\n\n        // Lắng nghe sự kiện lỗi trên Pool (quan trọng cho việc quản lý kết nối)\n        pool.on('error', (err, client) => {\n            node.error('Unexpected error on idle client', err);\n            // Trong ứng dụng thực tế có thể muốn xử lý lỗi nghiêm trọng hơn\n        });\n\n        // Thực hiện truy vấn để lấy danh sách tên các bảng\n        const sqlQuery = `\n            SELECT table_name\n            FROM information_schema.tables\n            WHERE table_type = 'BASE TABLE'\n            AND table_schema = 'public'; -- Hoặc schema khác nếu bảng của bạn nằm ngoài 'public'\n        `;\n\n        node.log(`Executing query: ${sqlQuery}`);\n        const result = await pool.query(sqlQuery);\n        const tableNames = result.rows.map(row => row.table_name);\n        node.warn(\"Database Tables:\");\n        node.warn(tableNames);\n        node.status({ fill: 'green', shape: 'dot', text: `Found ${tableNames.length} tables` });\n        msg.payload = tableNames;\n\n    } catch (error) {\n        node.status({ fill: 'red', shape: 'dot', text: 'DB Error' });\n        node.error(\"Database connection or query failed:\", error);\n\n        // Đặt thông báo lỗi vào msg.payload\n        msg.payload = { error: error.message };\n\n    } finally {\n        // Quan trọng: Đóng Pool khi bạn không còn cần nó nữa.\n        // Đối với Node Function xử lý msg liên tục, quản lý Pool ngoài hàm chính\n        // hoặc sử dụng context của Node có thể phù hợp hơn.\n        // Trong ví dụ đơn giản này, chúng ta sẽ đóng Pool sau mỗi lần chạy.\n        if (pool) {\n            node.log(\"Ending DB Pool connection.\");\n            await pool.end(); // Đóng tất cả kết nối trong Pool\n        }\n    }\n\n    // Trả về message để chuyển đến node tiếp theo trong flow\n    return msg;\n\n})(); // Tự động gọi async function này\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "pg",
-                "module": "pg"
-            }
-        ],
-        "x": 730,
-        "y": 280,
-        "wires": [
-            [
-                "81faf9b9c28f72be"
-            ]
-        ]
     }
 ]
